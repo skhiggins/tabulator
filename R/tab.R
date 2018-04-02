@@ -18,7 +18,7 @@
 #' a %>% tab(varname)
 #'
 #' # tibble
-#' b <- tibble(varname = ample.int(20, size = 1000000, replace = TRUE))
+#' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' b %>% tab(varname)
 #'
 #' @importFrom magrittr %>%

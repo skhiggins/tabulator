@@ -3,5 +3,3 @@
 import(data.table)
 import(dplyr)
 importFrom(magrittr,"%>%")
-importFrom(stringr,str_replace_all)
-importFrom(stringr,str_split)
