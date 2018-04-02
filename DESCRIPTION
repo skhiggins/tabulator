@@ -1,0 +1,22 @@
+Package: tabulator
+Title: Efficient tabulation with Stata-like output
+Version: 0.0.0.9000
+Authors@R: person("Sean", "Higgins", email = "seanhiggins@berkeley.edu", role = c("aut", "cre"))
+Description: Efficient tabulation with Stata-like output.
+	For each unique value of the variable, it shows the number of 
+	observations with that value, proportion of observations with that
+	value, and cumulative proportion, in descending order of frequency.
+	Accepts data.table or tibble as input. 
+	Efficient with big data: if you give it a data.table, 
+	tab() uses data.table syntax.
+Imports:
+	dplyr,
+	data.table,
+	tibble,
+	stringr,
+	magrittr
+Depends: R (>= 3.4.2)
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
