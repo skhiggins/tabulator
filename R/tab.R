@@ -24,6 +24,8 @@
 #' @importFrom magrittr %>%
 #' @import dplyr
 #' @import data.table
+#' 
+#' @export
 tab <- function(df, ..., round=2){ # note ... is the variable names to group by
   group_by <- dplyr::quos(...)
   if ("data.table" %in% class(df)) { # to check without requiring data.table

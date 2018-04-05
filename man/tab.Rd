@@ -7,7 +7,7 @@
 tab(df, ..., round = 2)
 }
 \arguments{
-\item{df}{A data.table, tibble, or data.frame}
+\item{df}{A data.table or tibble}
 
 \item{...}{A column or set of columns (without quotation marks)}
 
@@ -31,7 +31,7 @@ a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% tab(varname)
 
 # tibble
-b <- tibble(varname = ample.int(20, size = 1000000, replace = TRUE))
+b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% tab(varname)
 
 }
