@@ -27,3 +27,23 @@
 tabcount <- function(df, ...) { # note ... is the variable names to group by
   UseMethod("tabcount", df)
 }
+
+#' @export
+tabcount.data.table <- function(df, ...) {
+  group_by <- dplyr::quos(...) %>% quo_to_chr()
+  df[, .N, by = group_by][, .N]
+}
+
+#' @export
+tabcount.tbl_df <- function(df, ...) {
+  group_by <- dplyr::quos(...)
+  df %>%
+    dplyr::n_distinct(!!!group_by) # !!! since it's a quosure
+}
+
+#' @export
+tabcount.data.frame <- function(df, ...) {
+  group_by <- quo_to_chr(group_by)
+  length(unique(df[[group_by]]))
+}
+
