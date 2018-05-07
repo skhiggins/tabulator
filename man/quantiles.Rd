@@ -10,6 +10,10 @@ quantiles(df, ...)
 \item{df}{A data.table or tibble}
 
 \item{...}{A column or set of columns (without quotation marks)}
+
+\item{probs}{numeric vector of probabilities with values in [0,1].}
+
+\item{na.rm}{logical; if true, any NA and NaN's are removed from x before the quantiles are computed.}
 }
 \value{
 Quantile values
@@ -24,6 +28,9 @@ Efficient with big data: if you give it a \code{data.table},
 # data.table
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% quantiles(varname)
+
+# data.table: look at top 10\% in more detail
+a \%>\% quantiles(varname, probs = seq(0.9, 1, 0.01))
 
 # tibble
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
