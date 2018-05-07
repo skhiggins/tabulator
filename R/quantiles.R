@@ -7,11 +7,16 @@
 #'
 #' @param df A data.table or tibble
 #' @param ... A column or set of columns (without quotation marks)
+#' @param probs numeric vector of probabilities with values in [0,1].
+#' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
 #' @return Quantile values
 #' @examples
 #' # data.table
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' a %>% quantiles(varname)
+#'
+#' # data.table: look at top 10% in more detail
+#' a %>% quantiles(varname, probs = seq(0.9, 1, 0.01))
 #'
 #' # tibble
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
