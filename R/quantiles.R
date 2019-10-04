@@ -13,15 +13,17 @@
 #' @return Quantile values
 #' @examples
 #' # data.table
+#' library(data.table)
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' a %>% quantiles(varname)
+#' quantiles(a, varname)
 #'
 #' # data.table: look at top 10% in more detail
-#' a %>% quantiles(varname, probs = seq(0.9, 1, 0.01))
+#' quantiles(a, varname, probs = seq(0.9, 1, 0.01))
 #'
 #' # tibble
+#' library(tibble)
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' b %>% quantiles(varname)
+#' quantiles(b, varname)
 #'
 #' @importFrom magrittr %>%
 #' @import data.table

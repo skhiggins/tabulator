@@ -23,11 +23,13 @@ Efficient with big data: if you give it a \code{data.table},
 }
 \examples{
 # data.table
+library(data.table)
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
-a \%>\% tabcount(varname)
+tabcount(a, varname)
 
 # tibble
+library(tibble)
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-b \%>\% tabcount(varname)
+tabcount(b, varname)
 
 }
