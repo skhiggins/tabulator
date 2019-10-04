@@ -7,7 +7,7 @@
 tab(df, ...)
 }
 \arguments{
-\item{df}{A data.table or tibble}
+\item{df}{A data.table, tibble, or data.frame}
 
 \item{...}{A column or set of columns (without quotation marks)}
 
@@ -21,7 +21,7 @@ Produces a tabulation: for each unique group from the variable(s),
 \code{tab} shows the number of
 	observations with that value, proportion of observations with that
 		value, and cumulative proportion, in descending order of frequency.
-		Accepts data.table or tibble as input.
+		Accepts data.table, tibble, or data.frame as input.
 Efficient with big data: if you give it a \code{data.table},
 		\code{tab} uses \code{data.table} syntax.
 }
@@ -33,5 +33,9 @@ a \%>\% tab(varname)
 # tibble
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% tab(varname)
+
+# data.frame
+c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
+c \%>\% tab(varname)
 
 }

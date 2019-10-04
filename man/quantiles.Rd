@@ -21,6 +21,7 @@ Quantile values
 \description{
 Produces quantiles of the variables.
 \code{quantiles} shows quantile values.
+Accepts data.table, tibble, or data.frame as input.
 Efficient with big data: if you give it a \code{data.table},
 		\code{quantiles} uses \code{data.table} syntax.
 }
