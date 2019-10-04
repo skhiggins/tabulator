@@ -66,6 +66,6 @@ tab.tbl_df <- function(df, ..., round = 2) { # to check without requiring tibble
 
 #' @export
 tab.data.frame <- function(df, ..., round = 2) { # to check without requiring tibble
-  tab.data.table(setDT(df), ..., round)
+  tab.data.table(data.table::as.datatable(df), ..., round)
 }
 

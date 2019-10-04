@@ -2,6 +2,7 @@
 #'
 #' Produces quantiles of the variables.
 #' \code{quantiles} shows quantile values.
+#' Accepts data.table, tibble, or data.frame as input.
 #' Efficient with big data: if you give it a \code{data.table},
 #' 		\code{quantiles} uses \code{data.table} syntax.
 #'
@@ -33,7 +34,7 @@ quantiles <- function(df, ...) {
 
 #' @export
 quantiles.data.table <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
-  vars <- rlang::enquos(...) %>% map(rlang::as_name) %>% unlist()
+  vars <- rlang::enquos(...) %>% purrr::map(rlang::as_name) %>% unlist()
   tabbed <- df[, lapply(.SD, function(x) quantile(x, probs = probs, na.rm = na.rm)),
     .SDcols = vars
   ][, p := probs] %>% setcolorder(c("p", vars))
@@ -50,6 +51,6 @@ quantiles.tbl_df <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
 
 #' @export
 quantiles.data.frame <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
-  quantiles.data.table(setDT(df), ..., probs = probs, na.rm = na.rm)
+  quantiles.data.table(data.table::as.datatable(df), ..., probs = probs, na.rm = na.rm)
 }
 
