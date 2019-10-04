@@ -51,6 +51,6 @@ quantiles.tbl_df <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
 
 #' @export
 quantiles.data.frame <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
-  quantiles.data.table(data.table::as.datatable(df), ..., probs = probs, na.rm = na.rm)
+  quantiles.data.table(data.table::as.data.table(df), ..., probs = probs, na.rm = na.rm)
 }
 

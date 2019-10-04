@@ -42,6 +42,6 @@ tabcount.tbl_df <- function(df, ...) {
 
 #' @export
 tabcount.data.frame <- function(df, ...) {
-  tabcount.data.table(data.table::as.datatable(df), ...)
+  tabcount.data.table(data.table::as.data.table(df), ...)
 }
 
