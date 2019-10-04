@@ -33,7 +33,7 @@ quantiles <- function(df, ...) {
 
 #' @export
 quantiles.data.table <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
-  vars <- dplyr::quos(...) %>% quo_to_chr()
+  vars <- rlang::enquos(...) %>% map(rlang::as_name) %>% unlist()
   tabbed <- df[, lapply(.SD, function(x) quantile(x, probs = probs, na.rm = na.rm)),
     .SDcols = vars
   ][, p := probs] %>% setcolorder(c("p", vars))
@@ -42,8 +42,14 @@ quantiles.data.table <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE)
 
 #' @export
 quantiles.tbl_df <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
-  vars <- dplyr::quos(...)
+  vars <- rlang::enquos(...)
   df %>%
     dplyr::summarize(p = list(probs), q = list(quantile(!!!vars, probs))) %>%
-    tidyr::unnest()
+    tidyr::unnest(cols = c(p, q))
 }
+
+#' @export
+quantiles.data.frame <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
+  quantiles.data.table(setDT(df), ..., probs = probs, na.rm = na.rm)
+}
+

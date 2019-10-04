@@ -31,9 +31,10 @@ tab <- function(df, ...) {
 
 #' @export
 tab.data.table <- function(df, ..., round=2) { # note ... is the variable names to group by
-  group_by <- dplyr::quos(...) %>% quo_to_chr()
-  rowsofdata <- df[, .N] # faster than nrow() on big data.tables
-  df[, .N, by = group_by][,
+  dt <- df # in case df has a condition on it
+  group_by <- rlang::enquos(...) %>% map(rlang::as_name) %>% unlist()
+  rowsofdata <- dt[, .N] # faster than nrow() on big data.tables
+  dt[, .N, by = group_by][,
     temp_prop := N/rowsofdata][,
     prop := round(temp_prop, digits = round)][
     order(-N)][, # sort in descending order by N before cumulative prop
@@ -44,7 +45,7 @@ tab.data.table <- function(df, ..., round=2) { # note ... is the variable names 
 
 #' @export
 tab.tbl_df <- function(df, ..., round = 2) { # to check without requiring tibble
-  group_by <- dplyr::quos(...)
+  group_by <- rlang::enquos(...)
   rowsofdata <- nrow(df)
   df %>%
     dplyr::group_by(!!!group_by) %>% # !!! since it's a quosure
@@ -57,5 +58,10 @@ tab.tbl_df <- function(df, ..., round = 2) { # to check without requiring tibble
       cum_prop = round(cumsum(temp_prop), digits = round)
     ) %>%
     dplyr::select(-temp_prop)
+}
+
+#' @export
+tab.data.frame <- function(df, ..., round = 2) { # to check without requiring tibble
+  tab.data.table(setDT(df), ..., round)
 }
 

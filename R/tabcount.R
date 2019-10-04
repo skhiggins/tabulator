@@ -30,20 +30,20 @@ tabcount <- function(df, ...) { # note ... is the variable names to group by
 
 #' @export
 tabcount.data.table <- function(df, ...) {
-  group_by <- dplyr::quos(...) %>% quo_to_chr()
+  group_by <- rlang::enquos(...) %>% map(rlang::as_name) %>% unlist()
   df[, .N, by = group_by][, .N]
 }
 
 #' @export
 tabcount.tbl_df <- function(df, ...) {
-  group_by <- dplyr::quos(...)
+  group_by <- rlang::enquos(...)
   df %>%
-    dplyr::n_distinct(!!!group_by) # !!! since it's a quosure
+    dplyr::distinct(!!!group_by) %>%  # !!! since it's a quosure
+    nrow()
 }
 
 #' @export
 tabcount.data.frame <- function(df, ...) {
-  group_by <- quo_to_chr(group_by)
-  length(unique(df[[group_by]]))
+  tabcount.data.table(setDT(df), ...)
 }
 
