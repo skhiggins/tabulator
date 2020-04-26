@@ -27,17 +27,11 @@ Efficient with big data: if you give it a \code{data.table},
 }
 \examples{
 # data.table
-library(data.table)
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
-tab(a, varname)
+a \%>\% tab(varname)
 
 # tibble
-library(tibble)
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-tab(b, varname)
-
-# data.frame
-c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
-tab(c, varname)
+b \%>\% tab(varname)
 
 }

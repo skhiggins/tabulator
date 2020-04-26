@@ -10,6 +10,7 @@ Description: Efficient tabulation with Stata-like output.
 	Efficient with big data: if you give it a data.table, 
 	tab() uses data.table syntax.
 Imports:
+	assertthat,
 	dplyr,
 	data.table,
 	tibble,
@@ -21,4 +22,4 @@ Depends: R (>= 3.4.2)
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2

@@ -7,7 +7,7 @@
 quantiles(df, ...)
 }
 \arguments{
-\item{df}{A data.table or tibble}
+\item{df}{A data.table, tibble, or data.frame}
 
 \item{...}{A column or set of columns (without quotation marks)}
 
@@ -21,22 +21,19 @@ Quantile values
 \description{
 Produces quantiles of the variables.
 \code{quantiles} shows quantile values.
-Accepts data.table, tibble, or data.frame as input.
 Efficient with big data: if you give it a \code{data.table},
 		\code{quantiles} uses \code{data.table} syntax.
 }
 \examples{
 # data.table
-library(data.table)
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
-quantiles(a, varname)
+a \%>\% quantiles(varname)
 
 # data.table: look at top 10\% in more detail
-quantiles(a, varname, probs = seq(0.9, 1, 0.01))
+a \%>\% quantiles(varname, probs = seq(0.9, 1, 0.01))
 
 # tibble
-library(tibble)
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-quantiles(b, varname)
+b \%>\% quantiles(varname)
 
 }

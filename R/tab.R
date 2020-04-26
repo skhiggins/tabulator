@@ -14,18 +14,12 @@
 #' @return Tabulation (frequencies, proportion, cumulative proportion) for each unique value of the variables given in \code{...} from \code{df}.
 #' @examples
 #' # data.table
-#' library(data.table)
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' tab(a, varname)
+#' a %>% tab(varname)
 #'
 #' # tibble
-#' library(tibble)
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' tab(b, varname)
-#'
-#' # data.frame
-#' c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' tab(c, varname)
+#' b %>% tab(varname)
 #'
 #' @importFrom magrittr %>%
 #' @import data.table
@@ -36,9 +30,20 @@ tab <- function(df, ...) {
 }
 
 #' @export
-tab.data.table <- function(df, ..., round=2) { # note ... is the variable names to group by
+tab.data.table <- function(df, ..., by = NULL, round=2) { # note ... is the variable names to group by
   dt <- df # in case df has a condition on it
-  group_by <- rlang::enquos(...) %>% purrr::map(rlang::as_name) %>% unlist()
+  group_by <- rlang::enquos(...) %>% map(rlang::as_name) %>% unlist()
+  by__ <- rlang::enexpr(by)
+  if (!is.null(by__)) {
+    by_ <- rlang::enexpr(by) %>% rlang::as_name()
+
+    # assert constant values of group_by within by
+    assertthat::assert_that(
+      dt[, .GRP, by = c(by_, group_by)][, .N] ==
+      dt[, .GRP, by = by_][, .N]
+    )
+    dt <- dt[, .GRP, by = c(by_, group_by)]
+  }
   rowsofdata <- dt[, .N] # faster than nrow() on big data.tables
   dt[, .N, by = group_by][,
     temp_prop := N/rowsofdata][,
@@ -50,8 +55,17 @@ tab.data.table <- function(df, ..., round=2) { # note ... is the variable names 
 }
 
 #' @export
-tab.tbl_df <- function(df, ..., round = 2) { # to check without requiring tibble
+tab.tbl_df <- function(df, ..., by = NULL, round = 2) { # to check without requiring tibble
   group_by <- rlang::enquos(...)
+  by_ <- rlang::enquo(by)
+  by__ <- rlang::enexpr(by)
+  if (!is.null(by__)) {
+    assertthat::assert_that(
+      df %>% distinct(!!by_, !!!group_by) %>% nrow() ==
+      df %>% distinct(!!by_) %>% nrow()
+    )
+    df <- df %>% distinct(!!by_, !!!group_by, .keep_all = TRUE)
+  }
   rowsofdata <- nrow(df)
   df %>%
     dplyr::group_by(!!!group_by) %>% # !!! since it's a quosure
@@ -67,7 +81,7 @@ tab.tbl_df <- function(df, ..., round = 2) { # to check without requiring tibble
 }
 
 #' @export
-tab.data.frame <- function(df, ..., round = 2) { # to check without requiring tibble
-  tab.data.table(data.table::as.data.table(df), ..., round)
+tab.data.frame <- function(df, ..., by = NULL, round = 2) { # to check without requiring tibble
+  tab.data.table(data.table::as.data.table(df), ..., by = by, round = round)
 }
 
