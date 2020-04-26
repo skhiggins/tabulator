@@ -43,6 +43,7 @@ tab.data.table <- function(df, ..., by = NULL, round=2) { # note ... is the vari
       dt[, .GRP, by = by_][, .N]
     )
     dt <- dt[, .GRP, by = c(by_, group_by)]
+    tab.data.table(dt, ..., by = NULL, round = round) # recursive function
   }
   rowsofdata <- dt[, .N] # faster than nrow() on big data.tables
   dt[, .N, by = group_by][,
@@ -65,6 +66,7 @@ tab.tbl_df <- function(df, ..., by = NULL, round = 2) { # to check without requi
       df %>% distinct(!!by_) %>% nrow()
     )
     df <- df %>% distinct(!!by_, !!!group_by, .keep_all = TRUE)
+    tab.tbl_df(df, ..., by = NULL, round = round) # recursive function
   }
   rowsofdata <- nrow(df)
   df %>%
