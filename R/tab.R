@@ -84,6 +84,7 @@ tab.tbl_df <- function(df, ..., by = NULL, round = 2) { # to check without requi
 
 #' @export
 tab.data.frame <- function(df, ..., by = NULL, round = 2) { # to check without requiring tibble
-  tab.data.table(data.table::as.data.table(df), ..., by = by, round = round)
+  by_ <- rlang::enquo(by)
+  tab.data.table(data.table::as.data.table(df), ..., by = !!by_, round = round)
 }
 
