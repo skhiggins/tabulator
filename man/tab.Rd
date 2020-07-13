@@ -11,6 +11,8 @@ tab(df, ...)
 
 \item{...}{A column or set of columns (without quotation marks)}
 
+\item{by}{A variable by which you want to group observations before tabulating (without quotation marks)}
+
 \item{round}{An integer indicating the number of digits for proportion and cumulative proportion}
 }
 \value{
@@ -33,5 +35,9 @@ a \%>\% tab(varname)
 # tibble
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% tab(varname)
+
+# data.frame
+c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
+c \%>\% tab(varname)
 
 }
