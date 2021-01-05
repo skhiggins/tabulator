@@ -8,34 +8,38 @@
 #' Efficient with big data: if you give it a \code{data.table},
 #' 		\code{tab} uses \code{data.table} syntax.
 #'
-#' @param df A data.table, tibble, or data.frame
-#' @param ... A column or set of columns (without quotation marks)
-#' @param by A variable by which you want to group observations before tabulating (without quotation marks)
-#' @param round An integer indicating the number of digits for proportion and cumulative proportion
+#' @usage tab(df, ..., by, round)
+#' @param df A data.table, tibble, or data.frame.
+#' @param ... A column or set of columns (without quotation marks).
+#' @param by A variable by which you want to group observations before tabulating (without quotation marks).
+#' @param round An integer indicating the number of digits for proportion and cumulative proportion.
 #' @return Tabulation (frequencies, proportion, cumulative proportion) for each unique value of the variables given in \code{...} from \code{df}.
 #' @examples
+#' \dontrun{
 #' # data.table
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' a %>% tab(varname)
 #'
 #' # tibble
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' b %>% tab(varname)
+#' b %>% tab(varname, round = 1)
 #'
 #' # data.frame
 #' c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' c %>% tab(varname)
+#' }
 #'
 #' @importFrom magrittr %>%
 #' @import data.table
 #'
 #' @export
-tab <- function(df, ...) {
+tab <- function(df, ..., by = NULL, round = 2) {
   UseMethod("tab", df)
 }
 
 #' @export
-tab.data.table <- function(df, ..., by = NULL, round=2) { # note ... is the variable names to group by
+tab.data.table <- function(df, ..., by = NULL, round = 2) { # note ... is the variable names to group by
+  . <- temp_prop <- prop <- cum_prop <- N <- NULL
   dt <- df # in case df has a condition on it
   group_by <- rlang::enquos(...) %>% purrr::map(rlang::as_name) %>% unlist()
   by__ <- rlang::enexpr(by)
@@ -51,13 +55,16 @@ tab.data.table <- function(df, ..., by = NULL, round=2) { # note ... is the vari
     tab.data.table(dt, ..., by = NULL, round = round) # recursive function
   }
   rowsofdata <- dt[, .N] # faster than nrow() on big data.tables
-  dt[, .N, by = group_by][,
-    temp_prop := N/rowsofdata][,
-    prop := round(temp_prop, digits = round)][
-    order(-N)][, # sort in descending order by N before cumulative prop
-    cum_prop := round(cumsum(temp_prop), digits = round)][,
-    temp_prop := NULL][ # remove temp var
-    order(-N)] # make sure final data.table sorted
+  dt[, .N, by = group_by] %>%
+    .[, temp_prop := N / rowsofdata] %>%
+    .[, prop := round(temp_prop, digits = round)] %>%
+    # sort in descending order by N before cumulative prop
+    .[order(-N)] %>%
+    .[, cum_prop := round(cumsum(temp_prop), digits = round)] %>%
+    # remove temp var
+    .[, temp_prop := NULL] %>%
+    # make sure final data.table sorted
+    .[order(-N)]
 }
 
 #' @export
@@ -67,24 +74,24 @@ tab.tbl_df <- function(df, ..., by = NULL, round = 2) { # to check without requi
   by__ <- rlang::enexpr(by)
   if (!is.null(by__)) {
     assertthat::assert_that(
-      df %>% distinct(!!by_, !!!group_by) %>% nrow() ==
-      df %>% distinct(!!by_) %>% nrow()
+      df %>% dplyr::distinct(!!by_, !!!group_by) %>% nrow() ==
+      df %>% dplyr::distinct(!!by_) %>% nrow()
     )
-    df <- df %>% distinct(!!by_, !!!group_by, .keep_all = TRUE)
+    df <- df %>% dplyr::distinct(!!by_, !!!group_by, .keep_all = TRUE)
     tab.tbl_df(df, ..., by = NULL, round = round) # recursive function
   }
   rowsofdata <- nrow(df)
   df %>%
     dplyr::group_by(!!!group_by) %>% # !!! since it's a quosure
     dplyr::summarize(N = dplyr::n()) %>%
-    dplyr::arrange(desc(N)) %>%
+    dplyr::arrange(dplyr::desc(df$N)) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
-      temp_prop = N/rowsofdata,
-      prop = round(temp_prop, digits = round),
-      cum_prop = round(cumsum(temp_prop), digits = round)
+      temp_prop = df$N / rowsofdata,
+      prop = round(df$temp_prop, digits = round),
+      cum_prop = round(cumsum(df$temp_prop), digits = round)
     ) %>%
-    dplyr::select(-temp_prop)
+    dplyr::select(-df$temp_prop)
 }
 
 #' @export

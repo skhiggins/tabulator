@@ -12,6 +12,7 @@
 #' @param ... A column or set of columns (without quotation marks)
 #' @return Count of the number of unique groups formed by the variables given in \code{...} from \code{df}.
 #' @examples
+#' \dontrun{
 #' # data.table
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' a %>% tabcount(varname)
@@ -19,6 +20,7 @@
 #' # tibble
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' b %>% tabcount(varname)
+#' }
 #'
 #' @importFrom magrittr %>%
 #' @import data.table

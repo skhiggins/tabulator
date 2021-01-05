@@ -24,6 +24,7 @@ Efficient with big data: if you give it a \code{data.table},
 		\code{tab} uses \code{data.table} syntax.
 }
 \examples{
+\dontrun{
 # data.table
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% tabcount(varname)
@@ -31,5 +32,6 @@ a \%>\% tabcount(varname)
 # tibble
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% tabcount(varname)
+}
 
 }

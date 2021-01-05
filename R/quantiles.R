@@ -5,12 +5,15 @@
 #' Efficient with big data: if you give it a \code{data.table},
 #' 		\code{quantiles} uses \code{data.table} syntax.
 #'
-#' @param df A data.table, tibble, or data.frame
-#' @param ... A column or set of columns (without quotation marks)
+#' @usage quantiles(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE)
+#' @param df A data.table, tibble, or data.frame.
+#' @param ... A column or set of columns (without quotation marks).
 #' @param probs numeric vector of probabilities with values in [0,1].
 #' @param na.rm logical; if true, any NA and NaN's are removed from x before the quantiles are computed.
-#' @return Quantile values
+#' @return Quantile values.
+#'
 #' @examples
+#' \dontrun{
 #' # data.table
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' a %>% quantiles(varname)
@@ -20,23 +23,26 @@
 #'
 #' # tibble
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-#' b %>% quantiles(varname)
+#' b %>% quantiles(varname, na.rm = TRUE)
+#' }
 #'
 #' @importFrom magrittr %>%
 #' @import data.table
-#'
+#' @importFrom stats quantile
 #' @export
-quantiles <- function(df, ...) {
+quantiles <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
   UseMethod("quantiles", df)
   # to do: add round option like in tab()
 }
 
 #' @export
 quantiles.data.table <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
+  p <- . <- NULL
   vars <- rlang::enquos(...) %>% purrr::map(rlang::as_name) %>% unlist()
   tabbed <- df[, lapply(.SD, function(x) quantile(x, probs = probs, na.rm = na.rm)),
-    .SDcols = vars
-  ][, p := probs] %>% setcolorder(c("p", vars))
+    .SDcols = vars] %>%
+    .[, p := probs] %>%
+    setcolorder(c("p", vars))
   tabbed[] # make sure it prints
 }
 
@@ -45,7 +51,7 @@ quantiles.tbl_df <- function(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE) {
   vars <- rlang::enquos(...)
   df %>%
     dplyr::summarize(p = list(probs), q = list(quantile(!!!vars, probs))) %>%
-    tidyr::unnest(cols = c(p, q))
+    tidyr::unnest(cols = c(df$p, df$q))
 }
 
 #' @export

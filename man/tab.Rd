@@ -4,16 +4,16 @@
 \alias{tab}
 \title{Efficient tabulation}
 \usage{
-tab(df, ...)
+tab(df, ..., by, round)
 }
 \arguments{
-\item{df}{A data.table, tibble, or data.frame}
+\item{df}{A data.table, tibble, or data.frame.}
 
-\item{...}{A column or set of columns (without quotation marks)}
+\item{...}{A column or set of columns (without quotation marks).}
 
-\item{by}{A variable by which you want to group observations before tabulating (without quotation marks)}
+\item{by}{A variable by which you want to group observations before tabulating (without quotation marks).}
 
-\item{round}{An integer indicating the number of digits for proportion and cumulative proportion}
+\item{round}{An integer indicating the number of digits for proportion and cumulative proportion.}
 }
 \value{
 Tabulation (frequencies, proportion, cumulative proportion) for each unique value of the variables given in \code{...} from \code{df}.
@@ -28,16 +28,18 @@ Efficient with big data: if you give it a \code{data.table},
 		\code{tab} uses \code{data.table} syntax.
 }
 \examples{
+\dontrun{
 # data.table
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% tab(varname)
 
 # tibble
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-b \%>\% tab(varname)
+b \%>\% tab(varname, round = 1)
 
 # data.frame
 c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
 c \%>\% tab(varname)
+}
 
 }

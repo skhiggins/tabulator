@@ -4,19 +4,19 @@
 \alias{quantiles}
 \title{Efficient quantiles}
 \usage{
-quantiles(df, ...)
+quantiles(df, ..., probs = seq(0, 1, 0.1), na.rm = FALSE)
 }
 \arguments{
-\item{df}{A data.table, tibble, or data.frame}
+\item{df}{A data.table, tibble, or data.frame.}
 
-\item{...}{A column or set of columns (without quotation marks)}
+\item{...}{A column or set of columns (without quotation marks).}
 
 \item{probs}{numeric vector of probabilities with values in [0,1].}
 
 \item{na.rm}{logical; if true, any NA and NaN's are removed from x before the quantiles are computed.}
 }
 \value{
-Quantile values
+Quantile values.
 }
 \description{
 Produces quantiles of the variables.
@@ -25,6 +25,7 @@ Efficient with big data: if you give it a \code{data.table},
 		\code{quantiles} uses \code{data.table} syntax.
 }
 \examples{
+\dontrun{
 # data.table
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% quantiles(varname)
@@ -34,6 +35,7 @@ a \%>\% quantiles(varname, probs = seq(0.9, 1, 0.01))
 
 # tibble
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
-b \%>\% quantiles(varname)
+b \%>\% quantiles(varname, na.rm = TRUE)
+}
 
 }
