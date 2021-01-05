@@ -28,18 +28,19 @@ Efficient with big data: if you give it a \code{data.table},
 		\code{tab} uses \code{data.table} syntax.
 }
 \examples{
-\dontrun{
 # data.table
+library(data.table)
+library(magrittr)
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% tab(varname)
 
 # tibble
+library(dplyr)
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% tab(varname, round = 1)
 
 # data.frame
 c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
 c \%>\% tab(varname)
-}
 
 }

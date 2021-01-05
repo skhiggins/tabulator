@@ -25,8 +25,9 @@ Efficient with big data: if you give it a \code{data.table},
 		\code{quantiles} uses \code{data.table} syntax.
 }
 \examples{
-\dontrun{
 # data.table
+library(data.table)
+library(magrittr)
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% quantiles(varname)
 
@@ -34,8 +35,8 @@ a \%>\% quantiles(varname)
 a \%>\% quantiles(varname, probs = seq(0.9, 1, 0.01))
 
 # tibble
+library(dplyr)
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% quantiles(varname, na.rm = TRUE)
-}
 
 }

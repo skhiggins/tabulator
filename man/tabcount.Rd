@@ -16,22 +16,22 @@ Count of the number of unique groups formed by the variables given in \code{...}
 }
 \description{
 Produces a count of unique categories,
-\code{tab} shows the number of
-	observations with that value, proportion of observations with that
-		value, and cumulative proportion, in descending order of frequency.
+\code{tabcount} shows the number of
+	unique categories for the selected variable.
 		Accepts data.table, tibble, or data.frame as input.
 Efficient with big data: if you give it a \code{data.table},
-		\code{tab} uses \code{data.table} syntax.
+		\code{tabcount} uses \code{data.table} syntax.
 }
 \examples{
-\dontrun{
 # data.table
+library(data.table)
+library(magrittr)
 a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 a \%>\% tabcount(varname)
 
 # tibble
+library(dplyr)
 b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 b \%>\% tabcount(varname)
-}
 
 }

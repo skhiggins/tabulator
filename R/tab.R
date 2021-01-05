@@ -9,28 +9,39 @@
 #' 		\code{tab} uses \code{data.table} syntax.
 #'
 #' @usage tab(df, ..., by, round)
+#'
 #' @param df A data.table, tibble, or data.frame.
 #' @param ... A column or set of columns (without quotation marks).
 #' @param by A variable by which you want to group observations before tabulating (without quotation marks).
 #' @param round An integer indicating the number of digits for proportion and cumulative proportion.
+#'
 #' @return Tabulation (frequencies, proportion, cumulative proportion) for each unique value of the variables given in \code{...} from \code{df}.
+#'
+#' @importFrom data.table data.table
+#' @importFrom data.table .SD
+#' @importFrom data.table :=
+#' @importFrom data.table setcolorder
+#' @importFrom data.table .GRP
+#' @importFrom data.table .N
+#' @importFrom magrittr %>%
+#' @importFrom dplyr tibble
+#' @importFrom stats quantile
+#'
 #' @examples
-#' \dontrun{
 #' # data.table
+#' library(data.table)
+#' library(magrittr)
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' a %>% tab(varname)
 #'
 #' # tibble
+#' library(dplyr)
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' b %>% tab(varname, round = 1)
 #'
 #' # data.frame
 #' c <- data.frame(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' c %>% tab(varname)
-#' }
-#'
-#' @importFrom magrittr %>%
-#' @import data.table
 #'
 #' @export
 tab <- function(df, ..., by = NULL, round = 2) {
@@ -69,6 +80,7 @@ tab.data.table <- function(df, ..., by = NULL, round = 2) { # note ... is the va
 
 #' @export
 tab.tbl_df <- function(df, ..., by = NULL, round = 2) { # to check without requiring tibble
+  N <- temp_prop <- NULL
   group_by <- rlang::enquos(...)
   by_ <- rlang::enquo(by)
   by__ <- rlang::enexpr(by)
@@ -84,14 +96,14 @@ tab.tbl_df <- function(df, ..., by = NULL, round = 2) { # to check without requi
   df %>%
     dplyr::group_by(!!!group_by) %>% # !!! since it's a quosure
     dplyr::summarize(N = dplyr::n()) %>%
-    dplyr::arrange(dplyr::desc(df$N)) %>%
+    dplyr::arrange(dplyr::desc(N)) %>%
     dplyr::ungroup() %>%
     dplyr::mutate(
-      temp_prop = df$N / rowsofdata,
-      prop = round(df$temp_prop, digits = round),
-      cum_prop = round(cumsum(df$temp_prop), digits = round)
+      temp_prop = N / rowsofdata,
+      prop = round(temp_prop, digits = round),
+      cum_prop = round(cumsum(temp_prop), digits = round)
     ) %>%
-    dplyr::select(-df$temp_prop)
+    dplyr::select(-temp_prop)
 }
 
 #' @export

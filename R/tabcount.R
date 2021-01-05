@@ -7,22 +7,34 @@
 #' Efficient with big data: if you give it a \code{data.table},
 #' 		\code{tabcount} uses \code{data.table} syntax.
 #'
+#' @usage tabcount(df, ...)
+#'
 #' @param df A data.table, tibble, or data.frame
 #' @param ... A column or set of columns (without quotation marks)
+#'
 #' @return Count of the number of unique groups formed by the variables given in \code{...} from \code{df}.
+#'
+#' @importFrom data.table data.table
+#' @importFrom data.table .SD
+#' @importFrom data.table :=
+#' @importFrom data.table setcolorder
+#' @importFrom data.table .GRP
+#' @importFrom data.table .N
+#' @importFrom magrittr %>%
+#' @importFrom dplyr tibble
+#' @importFrom stats quantile
+#'
 #' @examples
-#' \dontrun{
 #' # data.table
+#' library(data.table)
+#' library(magrittr)
 #' a <- data.table(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' a %>% tabcount(varname)
 #'
 #' # tibble
+#' library(dplyr)
 #' b <- tibble(varname = sample.int(20, size = 1000000, replace = TRUE))
 #' b %>% tabcount(varname)
-#' }
-#'
-#' @importFrom magrittr %>%
-#' @import data.table
 #'
 #' @export
 tabcount <- function(df, ...) { # note ... is the variable names to group by

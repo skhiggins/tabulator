@@ -12,18 +12,18 @@ All functions work with data frames, data tables, and tibbles.
 
 ``` r
 # The easiest way to get tabulator is to install from CRAN:
-install.packages("tidyverse")
+install.packages("tabulator")
 
 ```
 
 ### Development version
 
 To get a bug fix or to use a feature from the development version, you
-can install the development version of dplyr from GitHub.
+can install the development version of tabulator from GitHub.
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("skhiggins/tabulator")
+# install.packages("remotes")
+remotes::install_github("skhiggins/tabulator")
 ```
 
 ## Usage
@@ -72,6 +72,9 @@ iris %>% tab(Sepal.Length)
 #> 35:          7.9  1 0.01     1.00
 #>     Sepal.Length  N prop cum_prop
 
+iris %>% tabcount(Sepal.Length)
+#> [1] 35
+
 iris %>% quantiles(Petal.Width)
 #>       p Petal.Width
 #>  1: 0.0        0.10
@@ -86,8 +89,6 @@ iris %>% quantiles(Petal.Width)
 #> 10: 0.9        2.20
 #> 11: 1.0        2.50
 
-iris %>% tabcount(Sepal.Length)
-#> [1] 35
 ```
 
 

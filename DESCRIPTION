@@ -1,6 +1,6 @@
 Package: tabulator
 Title: Efficient tabulation with Stata-like output
-Version: 0.0.0.9000
+Version: 1.0.0.0000
 Authors@R: person("Sean", "Higgins", email = "seanhiggins@berkeley.edu", role = c("aut", "cre"))
 Description: Efficient tabulation with Stata-like output.
 	For each unique value of the variable, it shows the number of 
