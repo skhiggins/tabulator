@@ -1,12 +1,11 @@
 #' Count distinct categories
 #'
 #' Produces a count of unique categories,
-#' \code{tab} shows the number of
-#' 	observations with that value, proportion of observations with that
-#' 		value, and cumulative proportion, in descending order of frequency.
+#' \code{tabcount} shows the number of
+#' 	unique categories for the selected variable.
 #' 		Accepts data.table, tibble, or data.frame as input.
 #' Efficient with big data: if you give it a \code{data.table},
-#' 		\code{tab} uses \code{data.table} syntax.
+#' 		\code{tabcount} uses \code{data.table} syntax.
 #'
 #' @param df A data.table, tibble, or data.frame
 #' @param ... A column or set of columns (without quotation marks)
